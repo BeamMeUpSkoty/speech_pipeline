@@ -1,0 +1,9 @@
+flask
+pandas
+contextlib2
+torch
+datetime
+wave
+scikit-learn
+numpy
+fire
