@@ -1,11 +1,11 @@
 import pandas as pd
-import datetime
+from datetime import datetime, timedelta
 
-class create_closed_captions(object):
-    """
-    """
-    def __init__(self, filename, segments, outpath):
-        """ Transcribe audio with whisper model
+class CreateClosedCaptions(object):
+	"""
+	"""
+	def __init__(self, filename, segments, outpath):
+		""" Transcribe audio with whisper model
 
 		Parameters
 		-----------
@@ -16,28 +16,37 @@ class create_closed_captions(object):
 			method in SpeechPipeline class. Text segments of Audio.
 		outpath : string
 			path to save vtt file to
-        """
+		"""
 
-        if isinstance(segments, pd.DataFrame):
-        	self.segments = segments
-        else:
-        	self.segments = pd.DataFrame(segments)
+		if isinstance(segments, pd.DataFrame):
+			self.segments = segments
+		else:
+			self.segments = pd.DataFrame(segments)
 
-        self.outpath = outpath
-        self.filename = filename
+		self.outpath = outpath
+		self.filename = filename
 
-    def format_timestamps(self);
-    	""" format for vtt files should be Hours:Minutes:Seconds:Milliseconds
-    	"""
-		# Convert the timecode columns to timedelta format
-		self.segments['start'] = pd.timestamp(df['start'], unit='s')
-		self.segments['end'] = pd.timestamp(df['end'], unit='s')
+	# define function to convert seconds to desired format
+	def convert_seconds(self, seconds):
+		"""
+		Parameters
+		-----------
+		seconds : xxx
+			xxx
+
+		Returns
+		-----------
+		formatte_times : xxx
+			xxx
+		"""
+
+		# create timedelta object with total seconds
+		td = timedelta(seconds=seconds)
+		# use strftime method to format timedelta object as desired
+		return (datetime.min + td).strftime('%H:%M:%S.%f')[:-3]
 
 
-    	return
-
-
-	def create_vtt_file(self):
+	def create_vtt_file(self, verbose):
 		"""
 		Returns
 		----------
@@ -49,8 +58,8 @@ class create_closed_captions(object):
 		# Load the CSV file into a pandas dataframe
 		
 		# Convert the timecode columns to timedelta format
-		self.segments['start'] = pd.to_timedelta(df['start'], unit='s')
-		self.segments['end'] = pd.to_timedelta(df['end'], unit='s')
+		self.segments['start_vtt'] = self.segments['start'].apply(self.convert_seconds)
+		self.segments['end_vtt'] = self.segments['end'].apply(self.convert_seconds)
 		
 		# Write the WebVTT file
 		with open(vtt_path, 'w') as f:
@@ -63,11 +72,11 @@ class create_closed_captions(object):
 				f.write(str(index + 1) + '\n')
 				
 				# Write the subtitle timecode
-				f.write(str(row['start']) + ' --> ' + str(row['end']) + '\n')
+				f.write(str(row['start_vtt']) + ' --> ' + str(row['end_vtt']) + '\n')
 				
 				# Write the subtitle text
 				f.write(str(row['text']) + '\n\n')
 
-		if self.verbose:
-			print('#### File saved to ', self.outpath+filename, '_captions.vtt ####')
+		if verbose:
+			print('#### File saved to ', vtt_path, ' ####')
 		return

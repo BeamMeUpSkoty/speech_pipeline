@@ -1,7 +1,7 @@
 import os
 
 import whisper
-import whisperx
+#import whisperx
 
 from pyannote.audio.pipelines.speaker_verification import PretrainedSpeakerEmbedding
 
@@ -13,7 +13,8 @@ import pandas as pd
 from transcribe_audio import TranscribeAudio
 from diarize_audio import DiarizeAudio
 from preprocess_audio import AudioFile
-from word_align_audio import WordAlignAudio
+#from word_align_audio import WordAlignAudio
+from create_closed_captions import CreateClosedCaptions
 
 class SpeechPipeline(object):
 
@@ -322,37 +323,9 @@ class SpeechPipeline(object):
 		vtt_file: file
 			saved to location of outpath
 		"""
-		vtt_path = self.outpath+filename
-		# Load the CSV file into a pandas dataframe
-		df = pd.DataFrame(segments)
-		
-		# Convert the timecode columns to timedelta format
-		df['start'] = pd.Timestamp(df['start'], unit='s')
-		df['end'] = pd.Timestamp(df['end'], unit='s')
-
-		#df['start'] = pd.to_timedelta(df['start'])
-		#df['end'] = pd.to_timedelta(df['end'])
-		
-		# Write the WebVTT file
-		with open(vtt_path, 'w') as f:
-			# Write the WebVTT header
-			f.write('WEBVTT\n\n')
-			
-			# Loop through each row of the dataframe and write the subtitle data
-			for index, row in df.iterrows():
-				# Write the subtitle index
-				f.write(str(index + 1) + '\n')
-				
-				# Write the subtitle timecode
-				f.write(str(row['start']) + ' --> ' + str(row['end']) + '\n')
-				
-				# Write the subtitle text
-				f.write(str(row['text']) + '\n\n')
-
-		if self.verbose:
-			print('#### File saved to ', self.outpath+filename, '_captions.vtt ####')
+		CCC = CreateClosedCaptions(filename, segments, self.outpath)
+		CCC.create_vtt_file(self.verbose)
 		return
-
 
 	def pipeline(self):
 		""" takes a directory or file. If directory, iterates through all files in the directory. 

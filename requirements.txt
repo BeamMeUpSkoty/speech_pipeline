@@ -2,6 +2,8 @@ flask
 pandas
 contextlib2
 torch
+torchvision
+torchaudio
 datetime
 wave
 scikit-learn
