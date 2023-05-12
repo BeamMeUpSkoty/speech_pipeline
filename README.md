@@ -27,7 +27,7 @@ docker run -it speech_pipeline
 To use the speech pipeline, you can use the command line interface (CLI) built with Fire. The following command can be used to run the pipeline:
 
 ```
-python3 main.py pipeline
+python3 main.py pipeline --path <<xx>> --num_speakers <<xx>> --language <<xx>>
 ```
 
 #### Required flags
@@ -55,7 +55,7 @@ The `pipeline` command also supports the following optional flags:
 Here are some example commands using the `pipeline` command:
 
 ```
-python3 main.py pipeline --path 'audio.wav' --num_speakers 2 --language 'en'
+python3 main.py pipeline --path 'audio.wav' --num_speakers 2 --language 'en' 
 ```
 
 This command transcribes an audio file located at `'audio.wav'`, assumes there are `2` speakers in the audio file, and the language of the audio is English (`en`).
