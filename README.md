@@ -8,7 +8,7 @@ To use the `speech_pipeline` container, follow these steps:
 
 ### Build Docker
 
-First, build the Docker container using the following command:
+First, navigate to the code repository where the DOCKERFILE. Build the Docker container using the following command:
 
 ```
 docker build -t speech_pipeline .
